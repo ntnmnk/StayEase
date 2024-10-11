@@ -21,9 +21,9 @@ pipeline {
             steps {
                 script {
                     // Find the jar file
-                    def jarFile = findFiles(glob: 'build/libs/*.jar')[0].path
-                    // Use the correct path for pscp.exe
-                    bat "C:\\ProgramData\\chocolatey\\bin\\pscp.exe -pw Sanfran@883097 ${jarFile} Administrator@192.168.140.215:C:\\"
+                   def jarFile = sh(script: "ls build/libs/*.jar", returnStdout: true).trim()
+bat "C:\\ProgramData\\chocolatey\\bin\\pscp.exe -pw Sanfran@883097 ${jarFile} Administrator@192.168.140.215:C:\\"
+
                 }
             }
         }
