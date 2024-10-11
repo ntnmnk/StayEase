@@ -26,7 +26,7 @@ pipeline {
         stage('Deploy') {
             steps {
                 // Update the SCP command as necessary
-                bat 'winscp.com /command "open scp://your-username@192.168.140.215" "put build/libs/*.jar C:\\" "exit"'
+                bat 'winscp.com /command "open scp://Administrator@192.168.140.215" "put build/libs/*.jar C:\\" "exit"'
             }
         }
     }
