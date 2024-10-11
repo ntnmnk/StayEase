@@ -5,7 +5,7 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
-                git branch: 'main', url: 'https://github.com/ntnmnk/StayEase.git'
+                git branch: 'master', url: 'https://github.com/ntnmnk/StayEase.git'
             }
         }
         stage('Build') {
@@ -23,7 +23,8 @@ pipeline {
                 script {
                     def jarFile = 'build/libs/*.jar'
                     // Use the correct path for pscp.exe
-                    bat "C:\\ProgramData\\chocolatey\\bin\\pscp.exe ${jarFile} Administrator@192.168.140.215:C:\\"
+                    bat "C:\\ProgramData\\chocolatey\\bin\\pscp.exe -pw Sanfran@883097 build/libs/*.jar Administrator@192.168.140.215:C:\\"
+
                 }
             }
         }
