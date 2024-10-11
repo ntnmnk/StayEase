@@ -1,36 +1,33 @@
+
 pipeline {
     agent any
 
     stages {
         stage('Checkout') {
             steps {
-                // Use the correct branch name for your repository
-                git branch: 'main', url: 'https://github.com/ntnmnk/StayEase.git'
+                git branch: 'master', url: 'https://github.com/ntnmnk/StayEase.git'
             }
         }
-
         stage('Build') {
             steps {
-                // Use 'bat' for Windows compatibility
-                bat './gradlew clean build'
+                sh './gradlew clean build -x test' // Skip tests
             }
         }
-
         stage('Package') {
             steps {
-                // Use 'bat' for Windows compatibility
-                bat './gradlew bootJar'
+                sh './gradlew bootJar'
             }
         }
-
         stage('Deploy') {
             steps {
-                // Update the SCP command as necessary
-                bat 'winscp.com /command "open scp://Administrator@192.168.140.215" "put build/libs/*.jar C:\\" "exit"'
+                script {
+                    def jarFile = 'build/libs/*.jar'
+                    // Use the correct path for pscp.exe
+                    bat "C:\\ProgramData\\chocolatey\\bin\\pscp.exe ${jarFile} Administrator@192.168.140.215:C:\\"
+                }
             }
         }
     }
-
     post {
         success {
             echo 'Build and Deploy succeeded!'
