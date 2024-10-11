@@ -1,4 +1,3 @@
-
 pipeline {
     agent any
 
@@ -21,10 +20,10 @@ pipeline {
         stage('Deploy') {
             steps {
                 script {
-                    def jarFile = 'build/libs/*.jar'
+                    // Find the jar file
+                    def jarFile = findFiles(glob: 'build/libs/*.jar')[0].path
                     // Use the correct path for pscp.exe
-                    bat "C:\\ProgramData\\chocolatey\\bin\\pscp.exe -pw Sanfran@883097 build/libs/*.jar Administrator@192.168.140.215:C:\\"
-
+                    bat "C:\\ProgramData\\chocolatey\\bin\\pscp.exe -pw Sanfran@883097 ${jarFile} Administrator@192.168.140.215:C:\\"
                 }
             }
         }
