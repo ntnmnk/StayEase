@@ -20,22 +20,11 @@ pipeline {
         stage('Deploy') {
             steps {
                 script {
-                    // Set the path to the JAR files
-                    def jarFilePath = 'C:\\deploy\\StayEase\\build\\libs\\'
-                    def jarName = ''
-
-                    // List files in the directory and filter for JAR files
-                    def files = bat(script: "dir /B ${jarFilePath}*.jar", returnStdout: true).trim().split('\n')
-                    if (files) {
-                        // Get the first JAR file found
-                        jarName = files[0]
-                        echo "Found JAR file: ${jarName}"
-                    } else {
-                        error 'No JAR file found!'
-                    }
+                    // Find the JAR file in the build/libs directory
+                    def jarFile = bat(script: 'dir /B C:\\deploy\\StayEase\\build\\libs\\*.jar', returnStdout: true).trim()
 
                     // Deploy your application using the found JAR file
-                    bat "cd ${jarFilePath} && java -jar ${jarName}"
+                    bat "java -jar C:\\deploy\\StayEase\\build\\libs\\${jarFile}"
                 }
             }
         }
