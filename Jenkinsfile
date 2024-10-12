@@ -21,7 +21,7 @@ pipeline {
             steps {
                 script {
                     // Set the name of the JAR file based on the build.gradle configuration
-                    def jarName = 'stayease-0.0.1-SNAPSHOT.jar' // Update this to your actual JAR name if different
+                    def jarName = 'StayEase-1.0.0.jar' // Update this to your actual JAR name if different
                     
                     // Deploy your application using the built JAR file
                     bat "cd C:\\deploy\\StayEase\\build\\libs && java -jar ${jarName}"
