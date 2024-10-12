@@ -13,7 +13,7 @@ pipeline {
             steps {
                 script {
                     // Navigate to the cloned repository directory
-                    bat 'cd C:\\deploy\\StayEase && ./gradlew build clean'
+                    bat 'cd C:\\deploy\\StayEase && gradle clean build'
                 }
             }
         }
