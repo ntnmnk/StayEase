@@ -21,9 +21,22 @@ pipeline {
             steps {
                 script {
                     // Find the jar file
-                   def jarFile = sh(script: "ls build/libs/*.jar", returnStdout: true).trim()
-bat "C:\\ProgramData\\chocolatey\\bin\\pscp.exe -pw Sanfran@883097 ${jarFile} Administrator@localhost:C:\\"
+                    def jarFile = sh(script: "ls build/libs/*.jar", returnStdout: true).trim()
 
+                    echo "Found JAR file: ${jarFile}"
+
+                    // Define deployment directory
+                    def deployDir = "C:\\deploy\\StayEase"
+
+                    // Copy the jar to the deployment directory
+                    bat """
+                    if not exist ${deployDir} mkdir ${deployDir}
+                    copy /Y ${jarFile} ${deployDir}
+                    """
+                    
+                    // Run the jar (assumes Java is installed and added to PATH)
+                    echo "Running the JAR..."
+                    bat "start java -jar ${deployDir}\\${jarFile.split('/').last()}"
                 }
             }
         }
