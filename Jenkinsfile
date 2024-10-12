@@ -1,44 +1,45 @@
 pipeline {
     agent any
-
     stages {
-        stage('Checkout') {
+        stage('Clone Repository') {
             steps {
-                git url: 'https://github.com/ntnmnk/StayEase.git', branch: 'main'
+                script {
+                    // Change to the C:\ directory before cloning
+                    bat 'cd C:\\ && git clone https://github.com/ntnmnk/StayEase.git'
+                }
             }
         }
         stage('Build') {
             steps {
-                sh './gradlew clean build -x test' // Skip tests
-            }
-        }
-        stage('Package') {
-            steps {
-                sh './gradlew bootJar'
+                script {
+                    // Navigate to the cloned repository directory
+                    bat 'cd C:\\StayEase && mvn clean install'
+                }
             }
         }
         stage('Deploy') {
             steps {
                 script {
-                    // Define the path to the jar file and the deployment directory
-                    def jarFile = 'build/libs/*.jar'
-                    def deployDir = "C:\\deploy\\StayEase"
-
-                    // Copy the jar to the deployment directory
-                    bat "if not exist ${deployDir} mkdir ${deployDir} && copy /Y ${jarFile} ${deployDir}"
-
-                    // Run the jar
-                    bat "start cmd /c java -jar ${deployDir}\\${jarFile.split('/').last()}"
+                    // Deploy your application (modify according to your needs)
+                    bat 'cd C:\\StayEase\\target && java -jar your-app.jar'
+                }
+            }
+        }
+        stage('Run Background Process') {
+            steps {
+                script {
+                    // Run a command in the background (PowerShell example)
+                    bat 'start /B powershell -Command "echo Background process started; Start-Sleep -Seconds 60; echo Background process completed"'
                 }
             }
         }
     }
     post {
         success {
-            echo 'Build and Deploy succeeded!'
+            echo 'Pipeline completed successfully!'
         }
         failure {
-            echo 'Build or Deploy failed!'
+            echo 'Pipeline failed!'
         }
     }
 }
