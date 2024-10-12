@@ -22,7 +22,6 @@ pipeline {
                 script {
                     // Find the jar file
                     def jarFile = sh(script: "ls build/libs/*.jar", returnStdout: true).trim()
-
                     echo "Found JAR file: ${jarFile}"
 
                     // Define deployment directory
@@ -34,9 +33,12 @@ pipeline {
                     copy /Y ${jarFile} ${deployDir}
                     """
                     
-                    // Run the jar (assumes Java is installed and added to PATH)
-                    echo "Running the JAR..."
-                    bat "start java -jar ${deployDir}\\${jarFile.split('/').last()}"
+                    // Check the contents of the deployment directory
+                    bat "dir ${deployDir}"
+
+                    // Run the jar
+                    echo "Running the JAR from path: ${deployDir}\\${jarFile.split('/').last()}"
+                    bat "java -jar ${deployDir}\\${jarFile.split('/').last()}"
                 }
             }
         }
