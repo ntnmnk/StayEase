@@ -5,7 +5,7 @@ pipeline {
             steps {
                 script {
                     // Change to the C:\ directory before cloning
-                    bat 'cd C:\\ && git clone https://github.com/ntnmnk/StayEase.git'
+                    bat 'cd C:\\deploy\\ && git clone https://github.com/ntnmnk/StayEase.git'
                 }
             }
         }
@@ -13,7 +13,7 @@ pipeline {
             steps {
                 script {
                     // Navigate to the cloned repository directory
-                    bat 'cd C:\\StayEase && mvn clean install'
+                    bat 'cd C:\\deploy\\StayEase && mvn clean install'
                 }
             }
         }
