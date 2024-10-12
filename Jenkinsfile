@@ -4,7 +4,7 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
-                git branch: 'main', url: 'https://github.com/ntnmnk/StayEase.git'
+                git url: 'https://github.com/ntnmnk/StayEase.git', branch: 'main'
             }
         }
         stage('Build') {
@@ -20,25 +20,15 @@ pipeline {
         stage('Deploy') {
             steps {
                 script {
-                    // Find the jar file
-                    def jarFile = sh(script: "ls build/libs/*.jar", returnStdout: true).trim()
-                    echo "Found JAR file: ${jarFile}"
-
-                    // Define deployment directory
+                    // Define the path to the jar file and the deployment directory
+                    def jarFile = 'build/libs/*.jar'
                     def deployDir = "C:\\deploy\\StayEase"
 
                     // Copy the jar to the deployment directory
-                    bat """
-                    if not exist ${deployDir} mkdir ${deployDir}
-                    copy /Y ${jarFile} ${deployDir}
-                    """
-                    
-                    // Check the contents of the deployment directory
-                    bat "dir ${deployDir}"
+                    bat "if not exist ${deployDir} mkdir ${deployDir} && copy /Y ${jarFile} ${deployDir}"
 
                     // Run the jar
-                    echo "Running the JAR from path: ${deployDir}\\${jarFile.split('/').last()}"
-                    bat "java -jar ${deployDir}\\${jarFile.split('/').last()}"
+                    bat "start cmd /c java -jar ${deployDir}\\${jarFile.split('/').last()}"
                 }
             }
         }
