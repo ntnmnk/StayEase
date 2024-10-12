@@ -20,11 +20,22 @@ pipeline {
         stage('Deploy') {
             steps {
                 script {
-                    // Set the name of the JAR file based on the build.gradle configuration
-                    def jarName = 'StayEase-1.0.0.jar' // Update this to your actual JAR name if different
-                    
-                    // Deploy your application using the built JAR file
-                    bat "cd C:\\deploy\\StayEase\\build\\libs && java -jar ${jarName}"
+                    // Set the path to the JAR files
+                    def jarFilePath = 'C:\\deploy\\StayEase\\build\\libs\\'
+                    def jarName = ''
+
+                    // List files in the directory and filter for JAR files
+                    def files = bat(script: "dir /B ${jarFilePath}*.jar", returnStdout: true).trim().split('\n')
+                    if (files) {
+                        // Get the first JAR file found
+                        jarName = files[0]
+                        echo "Found JAR file: ${jarName}"
+                    } else {
+                        error 'No JAR file found!'
+                    }
+
+                    // Deploy your application using the found JAR file
+                    bat "cd ${jarFilePath} && java -jar ${jarName}"
                 }
             }
         }
