@@ -12,7 +12,7 @@ pipeline {
         stage('Build') {
             steps {
                 script {
-                    // Navigate to the cloned repository directory
+                    // Navigate to the cloned repository directory and build the project
                     bat 'cd C:\\deploy\\StayEase && gradle clean build'
                 }
             }
@@ -20,8 +20,11 @@ pipeline {
         stage('Deploy') {
             steps {
                 script {
-                    // Deploy your application (modify according to your needs)
-                    bat 'cd C:\\StayEase\\target && java -jar your-app.jar'
+                    // Set the name of the JAR file based on the build.gradle configuration
+                    def jarName = 'StayEase-1.0.0.jar' // Update this to your actual JAR name if different
+                    
+                    // Deploy your application using the built JAR file
+                    bat "cd C:\\deploy\\StayEase\\build\\libs && java -jar ${jarName}"
                 }
             }
         }
